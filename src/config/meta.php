@@ -16,6 +16,7 @@ return array(
 		'description' => false,
 		'separator'   => ' | ',
 		'keywords'    => array(),
+		'favicon'     => '',
 	),
 
 );

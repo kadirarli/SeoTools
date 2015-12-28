@@ -18,6 +18,14 @@ class MetaGenerator
 	 */
 	protected $title_session;
 
+
+	/**
+	 * The favicon
+	 * 
+	 * @var string
+	 */
+	protected $favicon;
+
 	/**
 	 * The meta description.
 	 *
@@ -48,7 +56,8 @@ class MetaGenerator
 		'title'       => false,
 		'description' => false,
 		'separator'   => ' | ',
-		'keywords'    => array()
+		'keywords'    => array(),
+		'favicon'	  => ''
 	);
 
 	protected $webmaster = array(
@@ -93,11 +102,13 @@ class MetaGenerator
 		$description = $this->getDescription();
 		$keywords    = $this->getKeywords();
 		$metatags    = $this->metatags;
+		$favicon	 = $this->getFavicon();
 
 		$html = array();
 
 		$html[] = "<title>$title</title>";
 		$html[] = "<meta name='description' itemprop='description' content='{$description}' />";
+		$html[] = "<link rel='Shortcut Icon' href='$favicon' type='image/x-icon'>";
 
 		if (!empty($keywords)) {
 			$html[] = "<meta name='keywords' content='{$keywords}' />";
@@ -132,6 +143,10 @@ class MetaGenerator
 		if (array_key_exists('keywords', $data)) {
 			$this->setKeywords($data['keywords']);
 		}
+
+		if (array_key_exists('favicon', $data)) {
+			$this->setFavicon($data['favicon']);
+		}
 	}
 
 	/**
@@ -146,6 +161,16 @@ class MetaGenerator
 		$this->title_session = $title;
 
 		$this->title = $title . $this->getDefault('separator') . $this->getDefault('title');
+	}
+
+	/**
+	 * Set the Meta favicon.
+	 *
+	 * @param string $favicon
+	 */
+	public function setFavicon($favicon)
+	{
+		$this->favicon = $favicon;
 	}
 
 	/**
@@ -257,6 +282,16 @@ class MetaGenerator
 	}
 
 	/**
+	 * Get the Favicon description.
+	 *
+	 * @return string
+	 */
+	public function getFavicon()
+	{
+		return $this->favicon ? : $this->getDefault('favicon');
+	}
+
+	/**
 	 * Reset the title and description fields.
 	 *
 	 * @return void
@@ -266,6 +301,7 @@ class MetaGenerator
 		$this->title       = null;
 		$this->description = null;
 		$this->keywords    = array();
+		$this->favicon     = null;
 	}
 
 	/**

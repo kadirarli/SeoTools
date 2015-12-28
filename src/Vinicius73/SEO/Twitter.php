@@ -3,9 +3,9 @@ namespace Vinicius73\SEO;
 
 use App;
 use Input;
-use Vinicius73\SEO\Contracts\OpenGraphAware;
+use Vinicius73\SEO\Contracts\TwitterAware;
 
-class OpenGraph implements OpenGraphAware
+class Twitter implements TwitterAware
 {
 	/**
 	 * @var array
@@ -21,14 +21,11 @@ class OpenGraph implements OpenGraphAware
 	 * @var array
 	 */
 	protected static $defaults = array(
+		'type'        => false,
+		'url'         => null,
 		'title'       => 'seotools',
 		'description' => 'seotools',
-		'url'         => null,
-		'type'        => false,
 		'image'       => array(),
-		'site_name'   => 'seotools',
-		'fb:admins'    => array(),
-		'fb:app_id'   => null
 	);
 
 
@@ -54,7 +51,7 @@ class OpenGraph implements OpenGraphAware
 	/**
 	 * @return array
 	 */
-	public function getOpenGraphData()
+	public function getTwitterData()
 	{
 		$data = $this->data;
 		switch ($data['title']):
@@ -82,21 +79,6 @@ class OpenGraph implements OpenGraphAware
 		if (!$data['type']):
 			unset($data['type']);
 		endif;
-
-		if (!$data['fb:app_id']):
-			unset($data['fb:app_id']);
-		endif;
-
-		switch ($data['site_name']):
-			case 'seotools':
-				$full_site_name = App::make('vinicius73.seotools.generators.meta')->getTitle();
-				$site_name = explode(' | ', $full_site_name);
-				$data['site_name'] = $site_name[count($site_name)-1];
-				break;
-			case null:
-				unset($data['site_name']);
-				break;
-		endswitch;
 
 		return $data;
 	}
@@ -138,16 +120,6 @@ class OpenGraph implements OpenGraphAware
 		return $this;
 	}
 
-	public function addFbAdmin($fbAdmin)
-	{
-		if (!$this->defaultFbAdminChanged):
-			$this->defaultFbAdminChanged = true;
-			$this->data['fb:admins']     = array();
-		endif;
-		$this->data['fb:admins'][] = $image;
-		return $this;
-	}
-
 	/**
 	 * @param string $value
 	 * @return $this
@@ -164,15 +136,6 @@ class OpenGraph implements OpenGraphAware
 	public function setType($value)
 	{
 		return $this->setProperty('type', $value);
-	}
-
-	/**
-	 * @param string $value
-	 * @return $this
-	 */
-	public function setSiteName($value)
-	{
-		return $this->setProperty('site_name', $value);
 	}
 
 	/**
@@ -200,7 +163,7 @@ class OpenGraph implements OpenGraphAware
 	 */
 	public function generate()
 	{
-		$og = App::make('vinicius73.seotools.generators.opengraph');
+		$og = App::make('vinicius73.seotools.generators.twitter');
 		$og->fromObject($this);
 		return $og->generate();
 	}

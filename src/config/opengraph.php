@@ -7,7 +7,7 @@ return array(
 		 * Can be null|string|seotools
 		 * If 'seotools' the title will be awarded by MetaGenerator->getTitle()
 		 */
-		'title'       => 'seotools',
+		'title'       => 'asd',
 		'description' => 'seotools',
 		/**
 		 * default url
@@ -17,6 +17,8 @@ return array(
 		'url'         => null,
 		'type'        => false,
 		'image'       => array(),
-		'site_name'   => false
+		'site_name'   => 'seotools',
+		'fb:admins'    => array(),
+		'fb:app_id'   => null
 	)
 );

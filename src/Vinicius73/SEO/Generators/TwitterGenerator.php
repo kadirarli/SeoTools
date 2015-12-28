@@ -1,22 +1,22 @@
 <?php namespace Vinicius73\SEO\Generators;
 
-use Vinicius73\SEO\Contracts\OpenGraphAware;
+use Vinicius73\SEO\Contracts\TwitterAware;
 
-class OpenGraphGenerator
+class TwitterGenerator
 {
 	/**
-	 * The prefix used by the open graph protocol.
+	 * The prefix used by the twitter protocol.
 	 *
-	 * @const OPENGRAPH_PREFIX
+	 * @const TWITTER_PREFIX
 	 */
-	const OPENGRAPH_PREFIX = 'og:';
+	const TWITTER_PREFIX = 'twitter:';
 
 	/**
-	 * The tag used by the open graph protocol.
+	 * The tag used by the twitter protocol.
 	 *
-	 * @const OPENGRAPH_TAG
+	 * @const TWITTER_TAG
 	 */
-	const OPENGRAPH_TAG = '<meta property="[property]" content="[value]" />';
+	const TWITTER_TAG = '<meta property="[property]" content="[value]" />';
 
 	/**
 	 * The properties that we are going to generate.
@@ -36,7 +36,7 @@ class OpenGraphGenerator
 	);
 
 	/**
-	 * Render the open graph tags.
+	 * Render the twitter tags.
 	 *
 	 * @return string
 	 */
@@ -50,7 +50,7 @@ class OpenGraphGenerator
 					//$property = explode(':', $property);
 					foreach ($value as $_value) {
 						$html[] = strtr(
-							static::OPENGRAPH_TAG,
+							static::TWITTER_TAG,
 							array(
 								'[property]' => $property,
 								'[value]'    => $_value
@@ -60,9 +60,9 @@ class OpenGraphGenerator
 				else:
 					foreach ($value as $_value){
 						$html[] = strtr(
-							static::OPENGRAPH_TAG,
+							static::TWITTER_TAG,
 							array(
-								'[property]' => static::OPENGRAPH_PREFIX . $property,
+								'[property]' => static::TWITTER_PREFIX . $property,
 								'[value]'    => $_value
 							)
 						);
@@ -71,7 +71,7 @@ class OpenGraphGenerator
 			else:
 				if(strpos($property,':') > 0):
 					$html[] = strtr(
-						static::OPENGRAPH_TAG,
+						static::TWITTER_TAG,
 						array(
 							'[property]' => $property,
 							'[value]'    => $value
@@ -79,9 +79,9 @@ class OpenGraphGenerator
 					);
 				else:
 					$html[] = strtr(
-						static::OPENGRAPH_TAG,
+						static::TWITTER_TAG,
 						array(
-							'[property]' => static::OPENGRAPH_PREFIX . $property,
+							'[property]' => static::TWITTER_PREFIX . $property,
 							'[value]'    => $value
 						)
 					);
@@ -93,7 +93,7 @@ class OpenGraphGenerator
 	}
 
 	/**
-	 * Set the open graph properties from a raw array.
+	 * Set the twitter properties from a raw array.
 	 *
 	 * @param array $properties
 	 */
@@ -107,13 +107,13 @@ class OpenGraphGenerator
 	}
 
 	/**
-	 * Use the open graph data of a open graph aware object.
+	 * Use the twitter data of a twitter aware object.
 	 *
-	 * @param OpenGraphAware $object
+	 * @param TwitterAware $object
 	 */
-	public function fromObject(OpenGraphAware $object)
+	public function fromObject(TwitterAware $object)
 	{
-		$properties = $object->getOpenGraphData();
+		$properties = $object->getTwitterData();
 
 		$this->validateProperties($properties);
 
@@ -141,7 +141,7 @@ class OpenGraphGenerator
 	{
 		foreach ($this->required as $required) {
 			if (!array_key_exists($required, $properties)) {
-				throw new \InvalidArgumentException("Required open graph property [$required] is not present.");
+				throw new \InvalidArgumentException("Required twitter property [$required] is not present.");
 			}
 		}
 	}

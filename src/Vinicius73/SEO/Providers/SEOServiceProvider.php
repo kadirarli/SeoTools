@@ -4,8 +4,10 @@ use Illuminate\Http\Response;
 use Illuminate\Support\ServiceProvider;
 use Vinicius73\SEO\Generators\MetaGenerator;
 use Vinicius73\SEO\Generators\OpenGraphGenerator;
+use Vinicius73\SEO\Generators\TwitterGenerator;
 use Vinicius73\SEO\Generators\SitemapGenerator;
 use Vinicius73\SEO\OpenGraph as OpenGraphHelper;
+use Vinicius73\SEO\Twitter as TwitterHelper;
 
 class SEOServiceProvider extends ServiceProvider
 {
@@ -115,7 +117,25 @@ class SEOServiceProvider extends ServiceProvider
 			function ($app) {
 				$defaults = $app['config']->get('seotools::opengraph.defaults');
 
-				return new OpenGraphHelper(array(), $defaults);
+				return new OpenGraphHelper( $defaults);
+			}
+		);
+
+		// Register the twitter properties generator
+		$this->app->singleton(
+			'vinicius73.seotools.generators.twitter',
+			function ($app) {
+				return new twitterGenerator();
+			}
+		);
+
+		// Register the twitter properties generator helper
+		$this->app->singleton(
+			'vinicius73.seotools.generators.twitter.helper',
+			function ($app) {
+				$defaults = $app['config']->get('seotools::twitter.defaults');
+
+				return new twitterHelper( $defaults);
 			}
 		);
 	}
@@ -131,7 +151,9 @@ class SEOServiceProvider extends ServiceProvider
 			'vinicius73.seotools.generators.meta',
 			'vinicius73.seotools.generators.sitemap',
 			'vinicius73.seotools.generators.opengraph',
-			'vinicius73.seotools.generators.opengraph.helper'
+			'vinicius73.seotools.generators.opengraph.helper',
+			'vinicius73.seotools.generators.twitter',
+			'vinicius73.seotools.generators.twitter.helper'
 		);
 	}
 
